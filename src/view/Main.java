@@ -4,6 +4,7 @@ import classes.Batalha;
 import classes.Dificuldade;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -37,24 +38,54 @@ public class Main {
             jogada(jogo);
         } while (!jogo.verificarVitoria());
 
-
         System.out.println("=========VOCE GANHOU=======");
         LocalDateTime fim = LocalDateTime.now();
         long hours = ChronoUnit.HOURS.between(inicio, fim);
-        long minutes = (ChronoUnit.MINUTES.between(inicio, fim) - (hours*60));
-        long seconds = (ChronoUnit.SECONDS.between(inicio, fim)-((minutes*60) + (hours*60)));
+        long minutes = (ChronoUnit.MINUTES.between(inicio, fim) - (hours * 60));
+        long seconds = (ChronoUnit.SECONDS.between(inicio, fim) - ((minutes * 60) + (hours * 60)));
         System.out.printf("Tempo de jogo: %d horas, %d minutos %d segundos", hours, minutes, seconds);
         System.out.println();
     }
 
     public static void jogada(Batalha jogo) {
-        System.out.print("\nDigite a coluna que deseja lancar: ");
-        int colunaTorpedo = scann.nextInt();
-        System.out.print("Digite a linha que deseja lancar: ");
-        int linhaTorpedo = scann.nextInt();
+        Scanner scanner = new Scanner(System.in);
+        int colunaTorpedo;
+        int linhaTorpedo;
+
+        while (true) {
+            try {
+                System.out.print("\nDigite a coluna que deseja lancar (0 a 9): ");
+                colunaTorpedo = scann.nextInt();
+                if (colunaTorpedo >= 0 && colunaTorpedo <= 9) {
+                    break; // Sai do loop se a entrada for válida
+                } else {
+                    System.out.println("Por favor, insira um número entre 0 e 9.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Por favor, insira apenas números inteiros.");
+                scanner.nextLine(); // Limpa o buffer do scanner
+            }
+        }
+
+        while (true) {
+            try {
+                System.out.println();
+                System.out.print("Digite a linha que deseja lancar (0 a 9): ");
+                linhaTorpedo = scann.nextInt();
+                if (linhaTorpedo >= 0 && linhaTorpedo <= 9) {
+                    break; // Sai do loop se a entrada for válida
+                } else {
+                    System.out.println("Por favor, insira um número entre 0 e 9.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Por favor, insira apenas números inteiros.");
+                scanner.nextLine(); // Limpa o buffer do scanner
+            }
+        }
+
         System.out.println();
+
         jogo.lancarTorpedo(linhaTorpedo, colunaTorpedo);
-        jogo.imprimirTabuleiro();
     }
 
     public static Dificuldade retornaOpcao(int opcao) {
