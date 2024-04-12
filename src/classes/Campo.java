@@ -43,12 +43,10 @@ public class Campo {
 
     public String mostra(){
         String string = " ";
-        if(torpedoLancado == true && temNavio == true){
+        if(torpedoLancado && temNavio){
             string = "x";
         }else if (torpedoLancado == true) {
             string = "o";
-        }else if(temNavio == true){
-            string = "n";
         }
         return string;
     }

@@ -2,6 +2,8 @@ package view;
 
 import classes.Batalha;
 import classes.Dificuldade;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 /**
@@ -10,9 +12,9 @@ import java.util.Scanner;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    static Scanner scann = new Scanner(System.in);
 
-        Scanner scann = new Scanner(System.in);
+    public static void main(String[] args) {
 
         System.out.println(" x  x  x  x  x  x  x  x  x  x  o  o  o  o  o  o  o  o  o  o");
         System.out.println("          Jogo Batalha Naval - Carol Fagundes");
@@ -26,29 +28,35 @@ public class Main {
         int opcao = scann.nextInt();
 
         System.out.println();
+        System.out.println("Imprimindo tabuleiro no modo " + retornaOpcao(opcao));
+        System.out.println();
+        LocalDateTime inicio = LocalDateTime.now();
         Batalha jogo = new Batalha(retornaOpcao(opcao));
-        jogo.imprimirTabuleiro();
-        
-//        System.out.print("Digite a linha que deseja lançar o torpedo: ");
-//        System.out.print("Digite a coluna que deseja lancar o torpedo: ");
-        System.out.println("-----------------------");
-        jogo.sortearPosicaoNavio();
+        System.out.println("----------------------------------");
+        do {
+            jogada(jogo);
+        } while (!jogo.verificarVitoria());
+
+
+        System.out.println("=========VOCE GANHOU=======");
+        LocalDateTime fim = LocalDateTime.now();
+        long hours = ChronoUnit.HOURS.between(inicio, fim);
+        long minutes = (ChronoUnit.MINUTES.between(inicio, fim) - (hours*60));
+        long seconds = (ChronoUnit.SECONDS.between(inicio, fim)-((minutes*60) + (hours*60)));
+        System.out.printf("Tempo de jogo: %d horas, %d minutos %d segundos", hours, minutes, seconds);
+        System.out.println();
+    }
+
+    public static void jogada(Batalha jogo) {
+        System.out.print("\nDigite a coluna que deseja lancar: ");
+        int colunaTorpedo = scann.nextInt();
+        System.out.print("Digite a linha que deseja lancar: ");
+        int linhaTorpedo = scann.nextInt();
+        System.out.println();
+        jogo.lancarTorpedo(linhaTorpedo, colunaTorpedo);
         jogo.imprimirTabuleiro();
     }
-    
 
-//public static Dificuldade lerOpcao() {
-//        Scanner scann = new Scanner(System.in);
-//        try {
-//            opcaoTeste = scann.nextInt();
-//            executarOpcao(opcaoTeste);
-//        } catch (Exception e) {
-//            System.out.println("Opcao invalida. Por favor, insira um numero.");
-//            scann.nextLine(); // Limpa o buffer do scanner
-//            lerOpcao(); // Repete a leitura da opção
-//        }
-//    }
-//
     public static Dificuldade retornaOpcao(int opcao) {
         Dificuldade nivel = Dificuldade.NORMAL;
         switch (opcao) {
@@ -61,4 +69,5 @@ public class Main {
         }
         return nivel;
     }
+
 }

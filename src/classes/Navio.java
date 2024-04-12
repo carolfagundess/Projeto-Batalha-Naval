@@ -38,7 +38,7 @@ public class Navio {
     }
     
     public boolean afundadao(){
-        return afundado = true;
+        return afundado;
     }
 
     @Override
